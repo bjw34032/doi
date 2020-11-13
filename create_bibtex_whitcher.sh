@@ -77,23 +77,39 @@ for doi in "${DOI[@]}"; do
   printf '\n\n' >> "${OUTPUT_FILE}"
 done
 
-sed 's+%2F+/+g' "${OUTPUT_FILE}" >> "${TMP_FILE}"
+sed -e 's+%2F+/+g' -e '/url =.*,$/d' -e '/month =.*,$/d' "${OUTPUT_FILE}" >> "${TMP_FILE}"
 mv "${TMP_FILE}" "${OUTPUT_FILE}"
 
-print '@book{Book_2001,
+printf '@book{Book_2001,
 	doi = {10.1016/b978-0-12-279670-8.x5000-9},
-	url = {https://doi.org/10.1016/b978-0-12-279670-8.x5000-9},
 	year = 2001,
 	publisher = {Elsevier},
 	author = {Ramazan Gen{\c{c}}ay and Faruk Sel{\c{c}}uk and Brandon Whitcher},
 	title = {An Introduction to Wavelets and Other Filtering Methods in Finance and Economics}
 }\n\n' >> "${OUTPUT_FILE}"
 
-print '@online{
+printf '@online{Basty_2020,
     title = {Image Processing and Quality Control for Abdominal Magnetic Resonance Imaging in the UK Biobank},
     year = {2020},
     eprinttype = {arxiv},
     erprintclass = {eees.IV},
     eprint{2007.01251},
     author = {N. Basty and Y. Liu and M. Cule and E. L. Thomas and J. D. Bell and B. Whitcher}
+}\n\n' >> "${OUTPUT_FILE}"
+
+printf '@online{Fitzpatrick_2020,
+    title = {Large-scale analysis of iliopsoas muscle volumes in the {UK Biobank}},
+    year = {2020},
+    eprinttype = {arxiv},
+    erprintclass = {eees.IV},
+    eprint = {2008.05217},
+    author = {J. Fitzpatrick and N. Basty and M. Cule and Y. Liu and J. D. Bell and E. L. T. and B. Whitcher}
+}\n\n' >> "${OUTPUT_FILE}"
+
+printf '@online{Liu_2020,
+    title = {Systematic Quantification of Health Parameters from {UK Biobank} Abdominal MRI using Deep Learning},
+    year = {2020},
+    eprinttype = {bioRxiv},
+    doi = {10.1101/2020.07.14.187070},
+    author = {Y. Liu and N. Basty and B. Whitcher and J. D. Bell and N. {van Bruggen} and E. L. Thomas and M. Cule}
 }\n\n' >> "${OUTPUT_FILE}"
