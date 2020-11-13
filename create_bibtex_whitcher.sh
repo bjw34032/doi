@@ -1,6 +1,7 @@
 #!/bin/bash
 
-FILENAME="${HOME}/whitcher.bib"
+OUTPUT_FILE="${HOME}/whitcher.bib"
+TMP_FILE="/tmp/whitcher_edit.bib"
 DOI=(
     '10.3390/nu12072064'
     '10.1093/ajcn/nqaa100'
@@ -13,7 +14,7 @@ DOI=(
     '10.1016/j.juro.2016.11.090'
     '10.1155/2017/4519653'
     '10.1038/npjschz.2016.24'
-    'j.neuroimage.2015.08.012'
+    '10.1016/j.neuroimage.2015.08.012'
     '10.1172/JCI82636'
     '10.1371/journal.pone.0130900'
     '10.1002/jmri.24293'
@@ -45,7 +46,7 @@ DOI=(
     '10.1002/mrm.21229'
     '10.1016/j.jneumeth.2006.07.017'
     '10.1109/tmi.2006.884210'
-    '10.1517/17460441.1.2.111'
+    '10.2165/00124363-200620030-00003'
     '10.1016/j.ijpharm.2006.01.018'
     '10.1016/j.csda.2004.12.016'
     '10.1523/JNEUROSCI.3874-05.2006'
@@ -64,15 +65,35 @@ DOI=(
     '10.1080/00949650008812056'
     '10.1029/2000JD900110'
     '10.1071/EG00094'
+
+    '10.1016/B978-0-12-279670-8.X5000-9'
 )
 
-rm -f "${FILENAME}"
+rm -f "${OUTPUT_FILE}"
 
 for doi in "${DOI[@]}"; do
   echo "----- $doi -----"
-  curl -s https://api.crossref.org/works/"${doi}"/transform/application/x-bibtex >> "${FILENAME}"
-  printf '\n\n' >> "${FILENAME}"
+  curl -s https://api.crossref.org/works/"${doi}"/transform/application/x-bibtex >> "${OUTPUT_FILE}"
+  printf '\n\n' >> "${OUTPUT_FILE}"
 done
 
-sed -i 's+%2F+/+g' "${FILENAME}"
+sed 's+%2F+/+g' "${OUTPUT_FILE}" >> "${TMP_FILE}"
+mv "${TMP_FILE}" "${OUTPUT_FILE}"
 
+print '@book{Book_2001,
+	doi = {10.1016/b978-0-12-279670-8.x5000-9},
+	url = {https://doi.org/10.1016/b978-0-12-279670-8.x5000-9},
+	year = 2001,
+	publisher = {Elsevier},
+	author = {Ramazan Gen{\c{c}}ay and Faruk Sel{\c{c}}uk and Brandon Whitcher},
+	title = {An Introduction to Wavelets and Other Filtering Methods in Finance and Economics}
+}\n\n' >> "${OUTPUT_FILE}"
+
+print '@online{
+    title = {Image Processing and Quality Control for Abdominal Magnetic Resonance Imaging in the UK Biobank},
+    year = {2020},
+    eprinttype = {arxiv},
+    erprintclass = {eees.IV},
+    eprint{2007.01251},
+    author = {N. Basty and Y. Liu and M. Cule and E. L. Thomas and J. D. Bell and B. Whitcher}
+}\n\n' >> "${OUTPUT_FILE}"
